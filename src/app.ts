@@ -9,6 +9,7 @@ import orderRoutes from './routes/orderRoute';
 import sequelize,{ testConnection } from './config/db.config';
 import errorHandler from './middlewares/errorHandler';
 import cloudinary from 'cloudinary';
+import fetchAllBooks from './config/bookData';
 
 dotenv.config();
 const app = express();
@@ -40,18 +41,21 @@ const options = {
     },
     apis: ['./src/routes/*.ts'], // Path to your route files
   };
-
-const specs = swaggerJsdoc(options);
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-app.use('/user', userRoutes);
+  
+  const specs = swaggerJsdoc(options);
+  
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+  
+  app.use('/user', userRoutes);
 app.use('/book', bookRoutes);
 app.use('/order', orderRoutes);
 
-sequelize.sync({force:true}).then(() => {
-    console.log('Database & tables created!');
-  }
+// fetchAllBooks('search-terms', 'AIzaSyCCAeLtHPS0bq1ZJ_zxHaTxKSVXq7jYfLY')
+// .then()
+// .catch(err => console.error(err));
+sequelize.sync().then(() => {
+  console.log('Database & tables created!');
+}
 );
 
 

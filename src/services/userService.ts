@@ -43,6 +43,14 @@ class UserService {
   async deleteUser(id: number): Promise<number> {
     return userRepository.deleteUser(id);
   }
+
+  async updateUser(id: number, user: Partial<User>): Promise<User | null> {
+    const existingUser = await userRepository.getUserById(id);
+    if (!existingUser) {
+      throw new CustomError("User not found", 404);
+    }
+    return userRepository.updateUser(id, user);
+  }
 }
 
 export default new UserService();

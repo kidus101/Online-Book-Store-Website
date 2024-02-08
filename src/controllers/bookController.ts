@@ -31,8 +31,8 @@ class BookController {
       });
     const newBook = await bookService.createBook({
         title,
-        coverImage: myCloud.url,
-        coverImagePublicId: myCloud.public_id,
+        coverImageUrl: myCloud.url,
+        // coverImagePublicId: myCloud.public_id,
         writer,
         point,
         tag,
@@ -42,7 +42,9 @@ class BookController {
   }
 
   async getBooks(req: Request, res: Response) {
-    const books = await bookService.getAllBooks();
+    // default page and pageSize values are 1 and 10 respectively
+    const { page = 1, pageSize = 10 } = req.query;
+    const books = await bookService.getAllBooks(Number(page), Number(pageSize));
     res.json(books);
   }
 

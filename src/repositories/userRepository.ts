@@ -28,6 +28,16 @@ class UserRepository {
             }
         });
     }
+
+    // update user return user info
+    async updateUser(id: number, user: Partial<User>): Promise<User | null> {
+        await User.update(user, {
+            where: {
+                id: id
+            }
+        });
+        return User.findByPk(id);
+    }
 }
 
 export default new UserRepository();

@@ -26,8 +26,9 @@ class BookRepository {
         });
     }
 
-    async getAllBooks(): Promise<Book[]> {
-        return Book.findAll();
+    async getAllBooks(page: number, pageSize: number): Promise<Book[]> {
+        const offset = (page - 1) * pageSize;
+        return Book.findAll({ offset: offset, limit: pageSize });
     }
 }
 

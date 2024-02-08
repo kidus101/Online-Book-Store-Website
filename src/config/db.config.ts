@@ -1,10 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('bookstore', 'mikiyas', '1q2w3r4e', {
-    host: 'localhost',
-    dialect: 'postgres',
-    logging: console.log,
-});
+const sequelize = new Sequelize('postgres://wizjoysd:rDvRHdKbxMoIieSi7S8o0gjw4Z8FlOh-@baasu.db.elephantsql.com/wizjoysd');
 
 // Test the connection
 export async function testConnection() {

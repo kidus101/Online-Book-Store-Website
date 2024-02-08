@@ -14,7 +14,7 @@ class BookService {
     }
     return bookRepository.createBook({
       title: book.title as string,
-      coverImage: book.coverImage as string,
+      coverImageUrl: book.coverImageUrl as string,
         writer: book.writer as string,
         point: book.point as number,
         tag: book.tag as string,
@@ -25,8 +25,8 @@ class BookService {
         return bookRepository.deleteBook(id);
     }
 
-    async getAllBooks(): Promise<Book[]> {
-        return bookRepository.getAllBooks();
+    async getAllBooks(page: number, pageSize: number): Promise<Book[]> {
+      return bookRepository.getAllBooks(page, pageSize);
     }
 
 }

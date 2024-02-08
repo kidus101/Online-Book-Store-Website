@@ -4,8 +4,8 @@ import sequelize from '../config/db.config';
 class Book extends Model {
     public id!: number;
     public title!: string;
-    public coverImage!: string;
-    public coverImagePublicId!: string;
+    public coverImageUrl!: string;
+    // public coverImagePublicId!: string;
     public writer!: string;
     public point!: number;
     public tag!: string;
@@ -25,14 +25,14 @@ Book.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        coverImage: {
+        coverImageUrl: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        coverImagePublicId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+        // coverImagePublicId: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        // },
         writer: {
             type: DataTypes.STRING,
             allowNull: false,
