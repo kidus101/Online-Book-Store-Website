@@ -45,13 +45,19 @@ class BookController {
     // default page and pageSize values are 1 and 10 respectively
     const { page = 1, pageSize = 10 } = req.query;
     const books = await bookService.getAllBooks(Number(page), Number(pageSize));
-    res.json(books);
+    res.json({
+      message: "Books retrieved",
+      data: books,
+    })
   }
 
   async getBook(req: Request, res: Response) {
     const { id } = req.params;
     const book = await bookService.getBookById(Number(id));
-    res.json(book);
+    res.json({
+      message: "Book retrieved",
+      data: book,
+    });
   }
 
 //   async updateBook(req: AuthenticatedRequest, res: Response) {

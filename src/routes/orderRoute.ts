@@ -1,16 +1,25 @@
 import { Router } from "express";
 import orderController from "../controllers/orderController";
+import { auth } from "../middlewares/auth";
 
 const router = Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     BearerAuth:            # arbitrary name for the security scheme
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT    # optional, arbitrary value for documentation purposes
  * tags:
  *   - name: Order
  *     description: Order management
  * 
  * /order/create:
  *   post:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Create a new order
  *     tags: [Order]
  *     requestBody:
@@ -32,6 +41,8 @@ const router = Router();
  *  
  * /order/{id}:
  *   get:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Get an order by id
  *     tags: [Order]
  *     parameters:
@@ -47,6 +58,8 @@ const router = Router();
  *         description: Invalid credentials
  * 
  *   delete:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Delete an order
  *     tags: [Order]
  *     parameters:
@@ -63,6 +76,8 @@ const router = Router();
  * 
  * /order:
  *   get:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Get all orders
  *     tags: [Order]
  *     responses:
@@ -72,10 +87,10 @@ const router = Router();
  *         description: Invalid credentials
  */
 
-router.post("/create", orderController.createOrder);
-router.get("/:id", orderController.getOrderById);
-router.delete("/:id", orderController.deleteOrder);
-router.get("/", orderController.getAllOrders);
+router.post("/create",auth, orderController.createOrder);
+router.get("/:id",auth, orderController.getOrderById);
+router.delete("/:id",auth, orderController.deleteOrder);
+router.get("/",auth, orderController.getAllOrders);
 
 
 export default router;
