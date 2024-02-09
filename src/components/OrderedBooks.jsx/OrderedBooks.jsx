@@ -3,173 +3,154 @@ import axios from "axios";
 
 const OrderTable = () => {
   const [orders, setOrders] = useState([]);
+  const [singleBookData, setSingleBookData] = useState([]);
+  const [bookIdArray, setBookIdArray] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [orderedBooksResponse, setOrderedBooksResponse] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/order", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const orderedResponse = response.data;
+      setOrders(orderedResponse);
+
+      // Extract bookIds from orderedResponse
+      const extractedBookIds = orderedResponse.map((order) => order.id);
+      setBookIdArray(extractedBookIds);
+
+      // Fetch books by their IDs
+      await fetchBooksByIds(extractedBookIds);
+      console.log("extractedBookIds:", extractedBookIds);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchBooksByIds = async (extractedBookIds) => {
+    try {
+      const token = localStorage.getItem("token");
+      const newOrderedBooksResponse = [];
+
+      for (const bookId of extractedBookIds) {
+        const SingleBookresponse = await axios.get(
+          `http://localhost:5000/book/getById/${bookId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const singleBookData = SingleBookresponse.data.data;
+        console.log("singleBookData for ID", bookId, ":", singleBookData);
+        newOrderedBooksResponse.push(singleBookData);
+      }
+
+      setOrderedBooksResponse(newOrderedBooksResponse);
+
+      await logOrderedBooksResponse(newOrderedBooksResponse);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const logOrderedBooksResponse = async (newOrderedBooksResponse) => {
+    console.log("Logging newOrderedBooksResponse:", newOrderedBooksResponse);
+  };
+
+  // const fetchBookById = async (bookId) => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const SingleBookresponse = await axios.get(`http://localhost:5000/book/getById/${bookId}
+  //     `, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     // console.log("BID",bookId)
+  //     // console.log("SingleBookresponse", SingleBookresponse);
+
+  //     const singleBookData = SingleBookresponse.data.data;
+  //     setSingleBookData(singleBookData)
+  //     setIsLoading(false);
+
+  //     console.log( "singleBookData" , singleBookData)
+
+  //     // Handle the fetched book data as needed
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6ImtpZHVzIiwiZW1haWwiOiJraWR1c2FiZWJlMTAxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGxvQlhmVVRHVkVIL1c2bzUuMExLai5ISExLRGNQSWdSeGhNbjE5YVpKRHRXcHZDMC92bXB5IiwicG9pbnQiOjEwMCwiY3JlYXRlZEF0IjoiMjAyNC0wMi0wOFQyMzoxMTo0OC40MDZaIiwidXBkYXRlZEF0IjoiMjAyNC0wMi0wOFQyMzoxMTo0OC40MDZaIiwiaWF0IjoxNzA3NDM4Mjg4LCJleHAiOjE3MDgwNDMwODh9.KCIvc9o5E3d1rsL3jfAcaXx_no-3PUm6qloMIDEknbw";
-        const response = await axios.get("http://localhost:5000/order");
-        setOrders(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchOrders();
+    fetchData();
   }, []);
 
+
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Writer</th>
-          <th>Tag</th>
-          <th>Point</th>
-          <th>Cover Image</th>
-        </tr>
-      </thead>
-      <tbody>
-        {orders.map(({ id, writer, tag, point, coverImage }) => (
-          <tr key={id}>
-            <td>{id}</td>
-            <td>{writer}</td>
-            <td>{tag}</td>
-            <td>{point}</td>
-            <td>
-              <img src={coverImage} alt="Cover" />
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="flex mt-10 mb-56 justify-center">
+      <div
+        className={`overflow-auto md:overflow-x-auto md:overflow-y-auto shadow-lg rounded-lg ${
+          isLoading ? "opacity-50" : ""
+        }`}
+      >
+        {isLoading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th className="px-6 py-3">ID</th>
+                <th className="px-6 py-3">Title</th>
+                <th className="px-6 py-3">Cover Image</th>
+                <th className="px-6 py-3">Writer</th>
+                <th className="px-6 py-3">Point</th>
+                <th className="px-6 py-3">Tag</th>
+                <th className="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderedBooksResponse.map((book) => (
+                <tr
+                  key={book.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <td className="px-6 py-4">{book.id}</td>
+                  <td className="px-6 py-4">{book.title}</td>
+                  <td className="px-6 py-4">
+                    <img
+                      src={book.coverImageUrl}
+                      alt={book.title}
+                      className="h-10 w-10 object-cover rounded-full"
+                    />
+                  </td>
+                  <td className="px-6 py-4">{book.writer}</td>
+                  <td className="px-6 py-4">{book.point}</td>
+                  <td className="px-6 py-4">{book.tag}</td>
+                  <td className="px-6 py-4">
+                    <button className="py-2 px-4 border border-white rounded bg-red-500 text-white font-md hover:bg-red-300 hover:text-black">
+                      Cancel Order
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+
+
   );
 };
 
 export default OrderTable;
 
-// import React from "react";
-// import Book1 from "../../assets/books/book1.jpg";
-// import Book2 from "../../assets/books/book2.jpg";
-// import Book3 from "../../assets/books/book3.jpg";
-
-// const booksData = [
-//   {
-//     id: 1,
-//     img: Book1,
-//     title: "The Power of Now",
-//     Price: "$15",
-//     author: "Eckhart Tolle",
-//     tag: "Non-fiction",
-//   },
-//   {
-//     id: 2,
-//     img: Book2,
-//     title: "Atomic Habits",
-//     Price: "$20",
-//     author: "James Clear",
-//     tag: "Self-help",
-//   },
-//   {
-//     id: 3,
-//     img: Book3,
-//     title: "The Alchemist",
-//     Price: "$25",
-//     author: "Paulo Coelho",
-//     tag: "Fiction",
-//   },
-//   {
-//     id: 4,
-//     img: Book2,
-//     title: "Think and Grow",
-//     Price: "$25",
-//     author: "Napoleon Hill",
-//     tag: "Non-fiction",
-//   },
-//   {
-//     id: 5,
-//     img: Book1,
-//     title: "You Are a Badass",
-//     Price: "$10",
-//     author: "Jen Sincero",
-//     tag: "Self-help",
-//   },
-//   {
-//     id: 6,
-//     img: Book1,
-//     title: "Deep Work",
-//     Price: "$12",
-//     author: "Cal Newport",
-//     tag: "Non-fiction",
-//   },
-
-// ];
-
-// const OrderedBooks = () => {
-//   return (
-//     <div>
-//       <div className="container">
-//         <div className="text-center border border-gray-300 shadow-lg my-10 max-w-[1000px] mx-auto">
-//           <div class="relative overflow-x-auto">
-//             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-//               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-//                 <tr>
-//                   <th scope="col" class="px-6 py-3">
-//                     Product name
-//                   </th>
-//                   <th scope="col" class="px-6 py-3">
-//                     Color
-//                   </th>
-//                   <th scope="col" class="px-6 py-3">
-//                     Category
-//                   </th>
-//                   <th scope="col" class="px-6 py-3">
-//                     Price
-//                   </th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-//                   <th
-//                     scope="row"
-//                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-//                   >
-//                     Apple MacBook Pro 17"
-//                   </th>
-//                   <td class="px-6 py-4">Silver</td>
-//                   <td class="px-6 py-4">Laptop</td>
-//                   <td class="px-6 py-4">$2999</td>
-//                 </tr>
-//                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-//                   <th
-//                     scope="row"
-//                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-//                   >
-//                     Microsoft Surface Pro
-//                   </th>
-//                   <td class="px-6 py-4">White</td>
-//                   <td class="px-6 py-4">Laptop PC</td>
-//                   <td class="px-6 py-4">$1999</td>
-//                 </tr>
-//                 <tr class="bg-white dark:bg-gray-800">
-//                   <th
-//                     scope="row"
-//                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-//                   >
-//                     Magic Mouse 2
-//                   </th>
-//                   <td class="px-6 py-4">Black</td>
-//                   <td class="px-6 py-4">Accessories</td>
-//                   <td class="px-6 py-4">$99</td>
-//                 </tr>
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default OrderedBooks;

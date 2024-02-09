@@ -19,15 +19,15 @@ const SignIn = () => {
       // Handle the response as needed
       console.log(response.data);
 
-      if (response.data.message === "User created") {
+      if (response.data.token) {
         // Store the token in localStorage
         const token = response.data.token;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 3); // Set expiration to 3 days from now
         localStorage.setItem("token", token);
         localStorage.setItem("tokenExpiration", expirationDate.toISOString());
-      
-        navigate("/sign-in");
+  
+        navigate("/ ");
       }
     } catch (error) {
       // Handle any error that occurred during the request
