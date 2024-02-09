@@ -2,15 +2,7 @@ import React from "react";
 import Logo from "../../assets/website/logo.png";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
-
-const Menu = [
-  {
-    id: 1,
-    name: "Home",
-    link: "/#",
-  },
- 
-];
+import { Link } from "react-router-dom";
 
 const Navbar = ({ handleOrderPopup }) => {
   return (
@@ -24,21 +16,33 @@ const Navbar = ({ handleOrderPopup }) => {
                 Books
               </a>
             </div>
+
             <div className="flex justify-between items-center gap-4">
+              <div className="group relative cursor-pointer">
+                <a
+                  href="/sign-up"
+                  className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
+                >
+                  Home
+                </a>
+              </div>
+
+              <Link to="/books-bought">
+                <button className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3">
+                  Bought Books
+                </button>
+              </Link>
+
+              <Link to="/ordered-books">
+                <button className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3">
+                  Ordered Books
+                </button>
+              </Link>
+
               <ul className="hidden sm:flex items-center gap-4">
-                {Menu.map((menu) => (
-                  <li key={menu.id}>
-                    <a
-                      href={menu.link}
-                      className="inline-block py-4 px-4 hover:text-primary duration-200"
-                    >
-                      {menu.name}
-                    </a>
-                  </li>
-                ))}
                 <li className="group relative cursor-pointer">
                   <a
-                    href="/signup"
+                    href="/sign-up"
                     className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
                   >
                     Sign Up
@@ -49,17 +53,10 @@ const Navbar = ({ handleOrderPopup }) => {
                     href="/sign-in"
                     className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
                   >
-                   SignIn
+                    Sign In
                   </a>
                 </li>
               </ul>
-              <button
-                onClick={() => handleOrderPopup()}
-                className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3"
-              >
-                Order
-                <FaCartShopping className="text-xl text-white drop-shadow-sm cursor-pointer" />
-              </button>
             </div>
           </div>
         </div>

@@ -1,35 +1,65 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-// Import css files
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import App from "./App.jsx";
 import SignUp from "./components/Signup/SignUp.jsx";
 import SignIn from "./components/SignIn/SignIn.jsx";
-import BookDetails from "./components/BookDetails/BookDetails.jsx";
+import BooksBought from "./components/BooksBought/BooksBought.jsx";
+import OrderedBooks from "./components/OrderedBooks.jsx/OrderedBooks.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div> <App/> </div>,
+    element: (
+      <>
+         <App />
+       </>
+    ),
   },
   {
     path: "/sign-in",
-    element: <div> <SignIn/> </div>,
+    element: (
+      <>
+        <Navbar />
+        <SignIn />
+        <Footer />
+      </>
+    ),
   },
   {
     path: "/sign-up",
-    element: <div> <SignUp/> </div>,
+    element: (
+      <>
+        <Navbar />
+        <SignUp />
+        <Footer />
+      </>
+    ),
   },
   {
-    path: '/books/:id',
-    element: <div> <BookDetails/> </div>,
+    path: "/books-bought",
+    element: (
+      <>
+        <Navbar />
+        <BooksBought />
+        <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/ordered-books",
+    element: (
+      <>
+        <Navbar />
+        <OrderedBooks />
+        <Footer />
+      </>
+    ),
   },
 ]);
 
