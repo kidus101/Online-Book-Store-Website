@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "../BooksSlider/Loading";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [loadingSignUp, setloadingSignUp] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setloadingSignUp(true);
 
     try {
       const response = await axios.post("http://localhost:5000/user/login", {
@@ -26,17 +31,57 @@ const SignIn = () => {
         expirationDate.setDate(expirationDate.getDate() + 3); // Set expiration to 3 days from now
         localStorage.setItem("token", token);
         localStorage.setItem("tokenExpiration", expirationDate.toISOString());
-  
-        navigate("/ ");
+
+        navigate("/");
       }
     } catch (error) {
       // Handle any error that occurred during the request
+      const errorMessage =
+        error.response + " You should Buy Points from Our Store "
+          ? error.response.data.message
+          : "An error occurred";
+
+      showToast("error", errorMessage);
+
       console.error(error);
+      setloadingSignUp(false);
+    }
+  };
+
+  const showToast = (type, message) => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-success",
+      });
+    } else if (type === "error") {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-error",
+      });
     }
   };
 
   return (
-    <section className="bg-gray-50">
+    <section className="relative bg-gray-50">
+      {loadingSignUp && (
+        <div className="absolute inset-0 bg-gray-500 bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen">
         <a
           href="#"
@@ -90,13 +135,15 @@ const SignIn = () => {
               <button
                 type="submit"
                 className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                disabled={loadingSignUp} // Disable button during sign-up process
               >
-                Sign in
+                {loadingSignUp ? "Signing in..." : "Sign in"}
               </button>
             </form>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };

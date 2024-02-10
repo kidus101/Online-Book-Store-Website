@@ -7,9 +7,11 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [loadingSignUp, setloadingSignUp] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
+    setloadingSignUp(true);
 
     try {
       const response = await axios.post(
@@ -24,34 +26,64 @@ const SignUp = () => {
       // Handle the response as needed
       console.log(response.data);
 
-      if (response.data.message === "User logged in") {
+      if (response.data.message === "User created") {
         // Store the token in localStorage
         const token = response.data.token;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 3); // Set expiration to 3 days from now
         localStorage.setItem("token", token);
         localStorage.setItem("tokenExpiration", expirationDate.toISOString());
-      
-        navigate("/");
+
+        navigate("/sign-in");
       }
     } catch (error) {
       // Handle any error that occurred during the request
+      const errorMessage = error.response
+        ? error.response.data.message
+        : "Input Valid Email ";
+
+      showToast("error", errorMessage);
+
+      console.error(error);
+      setloadingSignUp(false);
       console.error(error);
     }
   };
 
-  // Check if token exists in localStorage
-const token = localStorage.getItem("token");
-
-if (token) {
-  // Token exists in localStorage
-  console.log("Token:", token);
-} else {
-  console.log("No token found in localStorage");
-}
+  const showToast = (type, message) => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-success",
+      });
+    } else if (type === "error") {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-error",
+      });
+    }
+  };
 
   return (
     <section className="bg-gray-50">
+      {loadingSignUp && (
+        <div className="absolute inset-0 bg-gray-500 bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"

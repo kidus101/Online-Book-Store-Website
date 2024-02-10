@@ -1,68 +1,155 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../../assets/website/logo.png";
-import { FaCartShopping } from "react-icons/fa6";
-import { FaCaretDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ handleOrderPopup }) => {
-  return (
-    <>
-      <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200">
-        <div className="container py-10 sm:py-0">
-          <div className="flex justify-between items-center">
-            <div>
-              <a href="#" className="font-bold text-2xl sm:text-3xl flex gap-2">
-                <img src={Logo} alt="Logo" className="w-10" />
-                Books
-              </a>
-            </div>
+const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-            <div className="flex justify-between items-center gap-4">
-              <div className="group relative cursor-pointer">
-                <a
-                  href="/ "
-                  className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  return (
+    <div>
+      <nav className="bg-white border-gray-200 dark:bg-gray-900">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <Link to="/" className="flex items-center gap-2">
+            <img src={Logo} alt="Logo" className="w-10" />{" "}
+            <span className="font-bold text-lg sm:text-2xl">Books</span>{" "}
+          </Link>
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="navbar-default"
+            aria-expanded={isMobileMenuOpen ? "true" : "false"}
+            onClick={toggleMobileMenu}
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+
+          <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              <li>
+                <Link
+                  to="/"
+                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
                 >
                   Home
-                </a>
-              </div>
-
-              <Link to="/books-bought">
-                <button className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3">
-                  Bought Books
-                </button>
-              </Link>
-
-              <Link to="/ordered-books">
-                <button className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3">
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/ordered-books"
+                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                >
                   Ordered Books
-                </button>
-              </Link>
-
-              <ul className="hidden sm:flex items-center gap-4">
-                <li className="group relative cursor-pointer">
-                  <a
-                    href="/sign-up"
-                    className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
-                  >
-                    Sign Up
-                  </a>
-                </li>
-                <li className="group relative cursor-pointer">
-                  <a
-                    href="/sign-in"
-                    className="flex  items-center gap-[2px] bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
-                  >
-                    Sign In
-                  </a>
-                </li>
-              </ul>
-            </div>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/ordered-books"
+                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                >
+                  Log Out
+                </Link>
+              </li>
+              {/* <li>
+                {" "}
+                <Link
+                  to="/sign-up"
+                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                >
+                  Sign Up
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/sign-in"
+                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                >
+                  Sign In
+                </Link>
+              </li> */}
+            </ul>
           </div>
         </div>
-      </div>
-    </>
+      </nav>
+    </div>
   );
 };
 
 export default Navbar;
+
+// import React from "react";
+// import Logo from "../../assets/website/logo.png";
+// import { Link } from "react-router-dom";
+
+// const Navbar = ({ handleOrderPopup }) => {
+//   return (
+//     <div className="bg-white shadow-md dark:bg-gray-900 dark:text-white py-4">
+//       <div className="container mx-auto flex justify-between items-center">
+//         <div className="flex items-center gap-4">
+//           <Link to="/" className="flex items-center gap-2">
+//             <img src={Logo} alt="Logo" className="w-10" />
+//             <span className="font-bold text-lg sm:text-2xl">Books</span>
+//           </Link>
+//         </div>
+
+//         <div className="flex items-center gap-4">
+// <Link
+//   to="/"
+//   className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+// >
+//   Home
+// </Link>
+
+//           <Link
+//             to="/books-bought"
+//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+//           >
+//             Bought Books
+//           </Link>
+
+//           <Link
+//             to="/ordered-books"
+//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+//           >
+//             Ordered Books
+//           </Link>
+
+//           <Link
+//             to="/sign-up"
+//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+//           >
+//             Sign Up
+//           </Link>
+
+//           <Link
+//             to="/sign-in"
+//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+//           >
+//             Sign In
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Navbar;

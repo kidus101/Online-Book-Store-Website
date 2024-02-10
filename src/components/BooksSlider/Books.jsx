@@ -5,17 +5,24 @@ import Book3 from "../../assets/books/book3.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Loading from "./Loading";
+import Skeleton from "../ReactSkeleton/Skeleton";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Books = () => {
   const [search, setSearch] = useState("");
+  const [orders, setOrders] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const baseUrl = "http://localhost:5000/book";
   const [page, setPage] = useState(1);
-
   const [booksData, setBooksData] = useState([]);
+  const [orderLoading, setOrderLoading] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
@@ -25,19 +32,19 @@ const Books = () => {
   useEffect(() => {
     setTimeout(async () => {
       const response = await axios.get(
-        `http://localhost:5000/book?page=${page}&pageSize=8`
+        `http://localhost:5000/book?page=${page}&pageSize=4`
       );
 
       setBooksData((prev) => [...prev, ...response.data.data]);
-      console.log(booksData)
+      console.log(booksData);
       setInitialLoadComplete(true);
       setLoading(false);
     }, 1500);
   }, [page]);
 
-  useEffect ( () => {
-    console.log(booksData)
-  } )
+  useEffect(() => {
+    console.log(booksData);
+  });
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -59,7 +66,7 @@ const Books = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         console.log("token", token);
         const response = await axios.get("http://localhost:5000/order", {
           headers: {
@@ -72,30 +79,95 @@ const Books = () => {
         console.log(error);
       }
     };
-  
+
     fetchOrders();
   }, []);
-
-  const handleOrder = async (bookId) => {
-    try {
-      console.log("bookID", bookId);
-      const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:5000/order/create", { bookId }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // Handle successful response if needed
-      console.log(response.data);
-    } catch (error) {
-      // Handle error if needed
-      console.error(error);
-    }
-  };
 
   const handleCardClick = (id) => {
     setSelectedCardId(id);
     console.log(selectedCardId);
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get("/book/search", {
+        params: {
+          title: searchTerm,
+          writer: searchTerm,
+          tag: searchTerm,
+          page: 1,
+          pageSize: 10,
+        },
+      });
+      setSearchResults(response.data);
+      console.log("SearchResults", response.data.data);
+    } catch (error) {
+      console.error("Error searching books:", error);
+    }
+  };
+
+  const handleOrder = async (bookId) => {
+    try {
+      console.log("bookID", bookId);
+      setOrderLoading(true); // Set loading state to true when order process starts
+
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/order/create",
+        { bookId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const successMessage = response.data.message
+        ? response.data.message
+        : "Ordered Successfully";
+      showToast("success", successMessage);
+
+      // Handle successful response if needed
+      console.log(response.data);
+      console.log(response);
+
+      setOrderLoading(false); // Set loading state to false after fetching is done
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+      const errorMessage =
+        error.response + " You should Buy Points from Our Store "
+          ? error.response.data.message
+          : "An error occurred";
+      showToast("error", errorMessage);
+      setOrderLoading(false); // Set loading state to false after fetching is done
+    }
+  };
+
+  // Function to show Toastify message
+  const showToast = (type, message) => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-success",
+      });
+    } else if (type === "error") {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toastify-error",
+      });
+    }
   };
 
   return (
@@ -112,7 +184,10 @@ const Books = () => {
             <input
               type="search"
               id="default-search"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                handleSearch(e.target.value);
+              }}
               className="w-2/3 p-4 mb-10 text-sm text-gray-900  focus:outline-none border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your search term"
             />
@@ -121,25 +196,12 @@ const Books = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {/* Card */}
                 {booksData
-                  .filter((item) => {
-                    const searchTerm = search.toLowerCase();
-                    const titleMatches = item.title
-                      .toLowerCase()
-                      .includes(searchTerm);
-                    const authorMatches = item.writer
-                      .toLowerCase()
-                      .includes(searchTerm);
-                    const tagMatches = item.tag
-                      .toLowerCase()
-                      .includes(searchTerm);
+                  .filter(({ title, writer, tag }) =>
+                    [title, writer, tag].some((field) =>
+                      field.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                  )
 
-                    return (
-                      searchTerm === "" ||
-                      tagMatches ||
-                      titleMatches ||
-                      authorMatches
-                    );
-                  })
                   .map(({ id, coverImageUrl, title, point, writer, tag }) => (
                     <div
                       key={id}
@@ -165,10 +227,10 @@ const Books = () => {
                           <span className="font-bold text-lg">Tag: {tag}</span>
                         </div>
                         <button
-                          onClick={ () => handleOrder(id)}
+                          onClick={() => handleOrder(id)}
                           className="bg-primary hover:scale-105 text-white py-1 px-4 rounded-full mt-4"
                         >
-                          Order Now
+                          {orderLoading ? "Ordering..." : "Order Now"}
                         </button>
                       </div>
                     </div>
@@ -178,6 +240,7 @@ const Books = () => {
           </div>
 
           <Loading />
+          <ToastContainer />
         </div>
       </div>
     </>

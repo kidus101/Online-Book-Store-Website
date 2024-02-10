@@ -3,6 +3,7 @@ import Book1 from "../../assets/books/book2.jpg";
 import Book2 from "../../assets/books/book1.jpg";
 import Book3 from "../../assets/books/book3.jpg";
 import Vector from "../../assets/website/blue-pattern.png";
+import { Link } from "react-router-dom";
 
 const ImageList = [
   {
@@ -30,11 +31,12 @@ const ImageList = [
 
 const Hero = ({ handleOrderPopup }) => {
   const [imageId, setImageId] = React.useState(Book1);
-  const [title, setTitle] = React.useState(" Discover, Explore, and Immerse Yourself!"
-
+  const [title, setTitle] = React.useState(
+    " Discover, Explore, and Immerse Yourself!"
   );
   const [description, setDescription] = React.useState(
-    "Welcome to our book store, where stories come alive. Explore our diverse collection of fiction, non-fiction, science, and essays, and uncover a world of knowledge and imagination."  ); 
+    "Welcome to our book store, where stories come alive. Explore our diverse collection of fiction, non-fiction, science, and essays, and uncover a world of knowledge and imagination."
+  );
 
   const bgImage = {
     backgroundImage: `url(${Vector})`,
@@ -65,7 +67,6 @@ const Hero = ({ handleOrderPopup }) => {
                 className="text-5xl sm:text-4xl lg:text-5xl font-bold"
               >
                 {title}
-                
               </h1>
               <p
                 data-aos="slide-up"
@@ -76,12 +77,11 @@ const Hero = ({ handleOrderPopup }) => {
                 {description}
               </p>
               <div>
-                <button
-                  onClick={handleOrderPopup}
-                  className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-                >
-                  Order Now
-                </button>
+                <Link to="/ordered-books" >
+                  <button className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full">
+                    Ordered Books
+                  </button>
+                </Link>
               </div>
             </div>
             {/* Image section */}
@@ -95,7 +95,6 @@ const Hero = ({ handleOrderPopup }) => {
                   className="w-[300px] h-[300px] sm:h-[550px] sm:w-[450px] sm:scale-125 object-contain mx-auto"
                 />
               </div>
-               
             </div>
           </div>
         </div>
