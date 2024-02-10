@@ -48,7 +48,7 @@ const BooksBought = () => {
 
       for (const bookId of extractedBookIds) {
         const SingleBookresponse = await axios.get(
-          `https://hosted-backend-online-book-store-2.onrender.com/book/getById/${bookId}`,
+          `https://hosted-backend-online-book-store-2.onrender.com/book/${bookId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,15 +70,15 @@ const BooksBought = () => {
     }
   };
 
+  const logOrderedBooksResponse = async (newOrderedBooksResponse) => {
+    // console.log("Logging newOrderedBooksResponse:", newOrderedBooksResponse);
+  };
+
   const handleCancelOrder = async (bookId, orders) => {
     try {
       setLoadingCancel(true);
       // Iterate through the orders to find the matching order
-      console.log("Inside handle cancel order");
-      console.log("Book Id", bookId);
 
-      console.log("orders", orders);
-      await deleteOrder(bookId);
       const updatedBooksResponse = orderedBooksResponse.filter(
         (book) => book.id !== bookId
       );
@@ -86,44 +86,6 @@ const BooksBought = () => {
     } catch (error) {
       console.log("Error finding order ID:", error);
       return null;
-    }
-  };
-
-  const deleteOrder = async (orderId) => {
-    try {
-      console.log("Inside the delete order");
-      console.log("orderId ", orderId);
-      const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `https://hosted-backend-online-book-store-2.onrender.com/order/${orderId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Check response status and handle accordingly
-      if (response.status === 200) {
-        const successMessage = response.data.message
-          ? response.data.message
-          : "Canceled the Order";
-        showToast("success", successMessage);
-        console.log(`Order ${orderId} Deleted successfully.`);
-
-        setLoadingCancel(false);
-      } else {
-        console.log(`Failed to cancel order ${orderId}.`);
-        // Handle error
-      }
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : "An error occurred";
-      showToast("error", errorMessage);
-
-      console.log("Error cancelling order:", error);
-      setLoadingCancel(false);
     }
   };
 
@@ -154,7 +116,6 @@ const BooksBought = () => {
     }
   };
 
- 
   useEffect(() => {
     fetchData();
   }, []);
@@ -224,7 +185,7 @@ const BooksBought = () => {
                       className="py-2 px-4 border border-white rounded bg-red-500 text-white font-md hover:bg-red-300 hover:text-black"
                       disabled={loadingCancel} // Disable button during cancellation
                     >
-                      {loadingCancel ? "Canceling Order..." : "Cancel Order"}
+                      {loadingCancel ? "Canceling Bought..." : "Cancel Bought"}
                     </button>
                   </td>
                 </tr>

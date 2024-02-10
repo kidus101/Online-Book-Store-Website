@@ -16,11 +16,14 @@ const OrderTable = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("https://hosted-backend-online-book-store-2.onrender.com/order", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "https://hosted-backend-online-book-store-2.onrender.com/order",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const orderedResponse = response.data;
       setOrders(orderedResponse);
@@ -74,13 +77,8 @@ const OrderTable = () => {
   const handleCancelOrder = async (bookId, orders) => {
     try {
       setLoadingCancel(true);
-      // Iterate through the orders to find the matching order
-      console.log("Inside handle cancel order");
-      console.log("Book Id", bookId);
-      console.log("orders", orders);
 
-      console.log("orders", orders);
-      await deleteOrder(bookId);
+      // await deleteOrder(bookId);
       const updatedBooksResponse = orderedBooksResponse.filter(
         (book) => book.id !== bookId
       );
@@ -116,19 +114,6 @@ const OrderTable = () => {
         }
       );
 
-      // Check response status and handle accordingly
-      if (response.status === 200) {
-        const successMessage = response.data.message
-          ? response.data.message
-          : "Canceled the Order";
-        showToast("success", successMessage);
-        console.log(`Order ${orderId} Deleted successfully.`);
-
-        setLoadingCancel(false);
-      } else {
-        console.log(`Failed to cancel order ${orderId}.`);
-        // Handle error
-      }
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -167,7 +152,6 @@ const OrderTable = () => {
     }
   };
 
- 
   useEffect(() => {
     fetchData();
   }, []);

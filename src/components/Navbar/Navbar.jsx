@@ -69,23 +69,15 @@ const Navbar = () => {
                   Books Bought
                 </Link>
               </li>
-              {/* <li>
-                {" "}
-                <Link
-                  to="/sign-up"
-                  className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-                >
-                  Sign Up
-                </Link>
-              </li>
               <li>
                 <Link
                   to="/sign-in"
                   className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
                 >
-                  Sign In
+                  Sign Out
                 </Link>
-              </li> */}
+              </li>
+
             </ul>
           </div>
         </div>
