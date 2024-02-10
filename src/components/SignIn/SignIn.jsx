@@ -32,7 +32,7 @@ const SignIn = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("tokenExpiration", expirationDate.toISOString());
 
-        navigate("/");
+        navigate("/books");
       }
     } catch (error) {
       // Handle any error that occurred during the request

@@ -141,7 +141,7 @@ const BooksBought = () => {
             <div className="text-center my-[10px] text-gray-600 dark:text-gray-400">
               <p className="text-4xl p-10">You don't have any ordered books.</p>
               <p> Go to choose books here. </p>
-              <Link to="/">
+              <Link to="/books">
                 <button className="px-4 py-2 my-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 hover:text-gray-100 transition duration-300 ease-in-out">
                   Go to See the Books List
                 </button>
@@ -188,6 +188,7 @@ const BooksBought = () => {
                       {loadingCancel ? "Canceling Bought..." : "Cancel Bought"}
                     </button>
                   </td>
+                  
                 </tr>
               ))}
             </tbody>

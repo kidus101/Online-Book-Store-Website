@@ -13,7 +13,7 @@ const Navbar = () => {
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/books" className="flex items-center gap-2">
             <img src={Logo} alt="Logo" className="w-10" />{" "}
             <span className="font-bold text-lg sm:text-2xl">Books</span>{" "}
           </Link>
@@ -88,60 +88,4 @@ const Navbar = () => {
 
 export default Navbar;
 
-// import React from "react";
-// import Logo from "../../assets/website/logo.png";
-// import { Link } from "react-router-dom";
 
-// const Navbar = ({ handleOrderPopup }) => {
-//   return (
-//     <div className="bg-white shadow-md dark:bg-gray-900 dark:text-white py-4">
-//       <div className="container mx-auto flex justify-between items-center">
-//         <div className="flex items-center gap-4">
-//           <Link to="/" className="flex items-center gap-2">
-//             <img src={Logo} alt="Logo" className="w-10" />
-//             <span className="font-bold text-lg sm:text-2xl">Books</span>
-//           </Link>
-//         </div>
-
-//         <div className="flex items-center gap-4">
-// <Link
-//   to="/"
-//   className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-// >
-//   Home
-// </Link>
-
-//           <Link
-//             to="/books-bought"
-//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-//           >
-//             Bought Books
-//           </Link>
-
-//           <Link
-//             to="/ordered-books"
-//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-//           >
-//             Ordered Books
-//           </Link>
-
-//           <Link
-//             to="/sign-up"
-//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-//           >
-//             Sign Up
-//           </Link>
-
-//           <Link
-//             to="/sign-in"
-//             className="text-sm sm:text-base bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
-//           >
-//             Sign In
-//           </Link>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Navbar;

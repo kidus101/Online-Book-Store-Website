@@ -121,7 +121,7 @@ const Books = () => {
       );
       const successMessage = response.data.message
         ? response.data.message
-        : "Ordered Successfully";
+        : " BoughtI Successfully";
       showToast("success", successMessage);
 
 
@@ -226,6 +226,11 @@ const Books = () => {
                           className="bg-primary hover:scale-105 text-white py-1 px-4 rounded-full mt-4"
                         >
                           {orderLoading ? "Ordering..." : "Order Now"}
+                        </button> <button
+                          onClick={() => handleOrder(id)}
+                          className="bg-primary hover:scale-105 text-white py-1 px-4 rounded-full mt-4"
+                        >
+                          {orderLoading ? "Buying..." : "Buy Now"}
                         </button>
                       </div>
                     </div>
