@@ -42,7 +42,6 @@ const Footer = () => {
               consectetur adipisicing elit. Possimus, voluptate.{" "}
             </p>
             <br />
-            
           </div>
           {/* Links */}
           <div className="grid grid-cols-2 sm:grid-cols-3 col-span-2 md:pl-10 ">
@@ -52,8 +51,11 @@ const Footer = () => {
                   Important Links
                 </h1>
                 <ul className={`flex flex-col gap-3`}>
-                  {FooterLinks.map((link) => (
-                    <li className="cursor-pointer hover:translate-x-1 duration-300 hover:text-primary space-x-1 text-gray-500">
+                  {FooterLinks.map((link, index) => (
+                    <li
+                      key={index+1} // Change key={link.id} to key={index}
+                      className="cursor-pointer hover:translate-x-1 duration-300 hover:text-primary space-x-1 text-gray-500"
+                    >
                       <span>&#11162;</span>
                       <span>{link.title}</span>
                     </li>
@@ -92,7 +94,6 @@ const Footer = () => {
                   ))}
                 </ul>
               </div>
-              
             </div>
           </div>
         </div>

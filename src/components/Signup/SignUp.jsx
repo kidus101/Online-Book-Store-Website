@@ -15,7 +15,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/user/create-account",
+        "https://hosted-backend-online-book-store-2.onrender.com/user/create-account",
         {
           name,
           email,

@@ -16,7 +16,7 @@ const OrderTable = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/order", {
+      const response = await axios.get("https://hosted-backend-online-book-store-2.onrender.com/order", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ const OrderTable = () => {
 
       for (const bookId of extractedBookIds) {
         const SingleBookresponse = await axios.get(
-          `http://localhost:5000/book/getById/${bookId}`,
+          `https://hosted-backend-online-book-store-2.onrender.com/book/${bookId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ const OrderTable = () => {
       console.log("orderId ", orderId);
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://localhost:5000/order/${orderId}`,
+        `https://hosted-backend-online-book-store-2.onrender.com/order/${orderId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -167,30 +167,7 @@ const OrderTable = () => {
     }
   };
 
-  // const fetchBookById = async (bookId) => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     const SingleBookresponse = await axios.get(`http://localhost:5000/book/getById/${bookId}
-  //     `, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     // console.log("BID",bookId)
-  //     // console.log("SingleBookresponse", SingleBookresponse);
-
-  //     const singleBookData = SingleBookresponse.data.data;
-  //     setSingleBookData(singleBookData)
-  //     setIsLoading(false);
-
-  //     console.log( "singleBookData" , singleBookData)
-
-  //     // Handle the fetched book data as needed
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
+ 
   useEffect(() => {
     fetchData();
   }, []);

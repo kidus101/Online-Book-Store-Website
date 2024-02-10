@@ -32,19 +32,17 @@ const Books = () => {
   useEffect(() => {
     setTimeout(async () => {
       const response = await axios.get(
-        `http://localhost:5000/book?page=${page}&pageSize=4`
+        `https://hosted-backend-online-book-store-2.onrender.com/book?page=${page}&pageSize=4`
       );
 
       setBooksData((prev) => [...prev, ...response.data.data]);
-      console.log(booksData);
+      // console.log(booksData);
       setInitialLoadComplete(true);
       setLoading(false);
     }, 1500);
   }, [page]);
 
-  useEffect(() => {
-    console.log(booksData);
-  });
+ 
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -67,13 +65,13 @@ const Books = () => {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log("token", token);
-        const response = await axios.get("http://localhost:5000/order", {
+        // console.log("token", token);
+        const response = await axios.get("https://hosted-backend-online-book-store-2.onrender.com/order", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("response", response);
+        // console.log("response", response);
         setOrders(response.data);
       } catch (error) {
         console.log(error);
@@ -85,7 +83,7 @@ const Books = () => {
 
   const handleCardClick = (id) => {
     setSelectedCardId(id);
-    console.log(selectedCardId);
+    // console.log(selectedCardId);
   };
 
   const handleSearch = async () => {
@@ -100,7 +98,7 @@ const Books = () => {
         },
       });
       setSearchResults(response.data);
-      console.log("SearchResults", response.data.data);
+      // console.log("SearchResults", response.data.data);
     } catch (error) {
       console.error("Error searching books:", error);
     }
@@ -108,12 +106,12 @@ const Books = () => {
 
   const handleOrder = async (bookId) => {
     try {
-      console.log("bookID", bookId);
+      // console.log("bookID", bookId);
       setOrderLoading(true); // Set loading state to true when order process starts
 
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/order/create",
+        "https://hosted-backend-online-book-store-2.onrender.com/order/create",
         { bookId },
         {
           headers: {
@@ -126,14 +124,11 @@ const Books = () => {
         : "Ordered Successfully";
       showToast("success", successMessage);
 
-      // Handle successful response if needed
-      console.log(response.data);
-      console.log(response);
 
       setOrderLoading(false); // Set loading state to false after fetching is done
     } catch (error) {
       // Handle error if needed
-      console.error(error);
+      // console.error(error);
       const errorMessage =
         error.response + " You should Buy Points from Our Store "
           ? error.response.data.message
@@ -202,9 +197,9 @@ const Books = () => {
                     )
                   )
 
-                  .map(({ id, coverImageUrl, title, point, writer, tag }) => (
+                  .map(({ id, coverImageUrl, title, point, writer, tag },index) => (
                     <div
-                      key={id}
+                      key={index}
                       className="border border-gray-200 shadow-lg rounded-md overflow-hidden mx-4 sm:mx-0"
                       onClick={() => handleCardClick(id)}
                     >
